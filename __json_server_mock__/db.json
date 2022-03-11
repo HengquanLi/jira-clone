@@ -1,3 +1,65 @@
 {
-  "user":[]
+  "users":[
+    {
+      "id": 1,
+      "name": "John"
+    },
+    {
+      "id": 2,
+      "name": "Kim"
+    },
+    {
+      "id": 3,
+      "name": "Ash"
+    },
+    {
+      "id": 4,
+      "name": "Malisa"
+    },
+    {
+      "id": 5,
+      "name": "Kate"
+    },
+    {
+      "id": 6,
+      "name": "Lucy"
+    }
+  ],
+  "projects":[
+    {
+      "id":1,
+      "name": "UI/UX",
+      "personId":1,
+      "organization":"Design Department",
+      "created":1540023654000
+    },
+    {
+      "id":2,
+      "name": "React",
+      "personId":2,
+      "organization":"Frontend",
+      "created":1540022558410
+    },
+    {
+      "id":3,
+      "name": "Api",
+      "personId":3,
+      "organization":"Backend",
+      "created":1874443654000
+    },
+    {
+      "id":4,
+      "name": "UI/UX",
+      "personId":4,
+      "organization":"Design Department",
+      "created":1201123654000
+    },
+    {
+      "id":5,
+      "name": "Cloud",
+      "personId":5,
+      "organization":"Backend",
+      "created":1640023654000
+    }
+  ]
 }

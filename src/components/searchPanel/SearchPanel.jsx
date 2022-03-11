@@ -1,23 +1,6 @@
 import React, { useState } from 'react';
 
-const SearchPanel = () => {
-  const [project, setProject] = useState({
-    name: '',
-    personId: '',
-  });
-  const [users, setUsers] = useState([]);
-  const [projectList, setProjectList] = useState([]);
-
-  useEffect(() => {
-    fetch('').then(async (res) => {
-      if (res.ok) {
-      }
-    });
-
-    return () => {
-      second;
-    };
-  }, [third]);
+const SearchPanel = ({users,project, setProject }) => {
 
   return (
     <form action="">
@@ -41,9 +24,9 @@ const SearchPanel = () => {
             })
           }
         >
-          <option value={''}>Manager</option>
+          <option value={''}>Leader</option>
           {users.map((user) => (
-            <option value={user.id}>{user.name}</option>
+            <option key={user.id} value={user.id}>{user.name}</option>
           ))}
         </select>
       </div>
