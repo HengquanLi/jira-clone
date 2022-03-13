@@ -1,6 +1,20 @@
 import React from 'react';
+import { User } from '../searchPanel/SearchPanel';
 
-const List = ({ users, projectsList }) => {
+interface Project {
+  id: string;
+  name: string;
+  personId: string;
+  organization: string;
+  pin: boolean;
+}
+
+interface ListProps {
+  projectsList: Project[];
+  users: User[];
+}
+
+const List = ({ users, projectsList }: ListProps) => {
   return (
     <table>
       <thead>

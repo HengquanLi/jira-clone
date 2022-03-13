@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import * as qs from 'qs';
 import { cleanObject } from '../../utils';
 import { useMount, useDebounce } from '../../utils';
 
 import { List, SearchPanel } from '../../components';
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
 
 const ListPage = () => {
   const [users, setUsers] = useState([]);
@@ -12,12 +15,13 @@ const ListPage = () => {
     personId: '',
   });
   const [projectsList, setProjectsList] = useState([]);
-
+  
   const debounceProject = useDebounce(project, 2000);
+
 
   useEffect(() => {
     fetch(
-      `http://localhost:3001/projects?${qs.stringify(
+      `${apiUrl}/projects?${qs.stringify(
         cleanObject(debounceProject)
       )}`
     ).then(async (res) => {
@@ -28,7 +32,7 @@ const ListPage = () => {
   }, [debounceProject]);
 
   useMount(() => {
-    fetch('http://localhost:3001/users').then(async (res) => {
+    fetch(`${apiUrl}/users`).then(async (res) => {
       if (res.ok) {
         setUsers(await res.json());
       }

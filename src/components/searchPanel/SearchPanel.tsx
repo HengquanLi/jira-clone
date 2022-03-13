@@ -1,7 +1,23 @@
 import React, { useState } from 'react';
 
-const SearchPanel = ({users,project, setProject }) => {
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  title: string;
+  organization: string;
+}
 
+interface SearchPanelProps {
+  users: User[];
+  project: {
+    name: string;
+    personId: string;
+  };
+  setProject: (project: SearchPanelProps['project']) => void;
+}
+
+const SearchPanel = ({ users, project, setProject }: SearchPanelProps) => {
   return (
     <form action="">
       <div>
@@ -26,7 +42,9 @@ const SearchPanel = ({users,project, setProject }) => {
         >
           <option value={''}>Leader</option>
           {users.map((user) => (
-            <option key={user.id} value={user.id}>{user.name}</option>
+            <option key={user.id} value={user.id}>
+              {user.name}
+            </option>
           ))}
         </select>
       </div>
