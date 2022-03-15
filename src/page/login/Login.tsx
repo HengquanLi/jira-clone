@@ -4,16 +4,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
   const login = (param: { username: string; password: string }) => {
-    fetch(`${apiUrl}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(param),
-    }).then(async (res) => {
-      if (res.ok) {
-      }
-    });
+   
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -35,7 +26,7 @@ const Login = () => {
         <label htmlFor="password">Password</label>
         <input type="password" id={'password'} />
       </div>
-      <button type="submit">login</button>
+      <button type="submit">Regist</button>
     </form>
   );
 };
