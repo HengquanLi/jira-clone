@@ -10,26 +10,27 @@ export const getToken = () => window.localStorage.getItem(localStorageKey);
 
 export const handleUserResponse = ({ user }: { user: User }) => {
   window.localStorage.setItem(localStorageKey, user.token || '');
-  return user
+  return user;
 };
 
-export const login =(data:{username:string, password:string})=>{
-   fetch(`${apiUrl}/login`, {
-     method: 'POST',
-     headers: {
-       'Content-type': 'application/json',
-     },
-     body: JSON.stringify(data),
-   }).then(async (res) => {
-     if (res.ok) {
-       return handleUserResponse(await res.json())
-     }else{
-      Promise.reject(data)}
-   });
-}
+export const login = (data: { username: string; password: string }) => {
+  return fetch(`${apiUrl}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }).then(async (res: Response) => {
+    if (res.ok) {
+      return handleUserResponse(await res.json());
+    } else {
+      return Promise.reject(data);
+    }
+  });
+};
 
 export const register = (data: { username: string; password: string }) => {
-  fetch(`${apiUrl}/register`, {
+  return fetch(`${apiUrl}/register`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
@@ -38,10 +39,10 @@ export const register = (data: { username: string; password: string }) => {
   }).then(async (res) => {
     if (res.ok) {
       return handleUserResponse(await res.json());
-    }else{
-      Promise.reject(data)
+    } else {
+      return Promise.reject(data);
     }
   });
 };
 
-export const logout =()=> window.localStorage.removeItem(localStorageKey)
+export const logout = async () => window.localStorage.removeItem(localStorageKey);

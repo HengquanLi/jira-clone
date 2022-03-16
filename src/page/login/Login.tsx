@@ -1,11 +1,10 @@
+import { useAuth } from 'context/auth-context';
 import React, { FormEvent } from 'react';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
-  const login = (param: { username: string; password: string }) => {
-   
-  };
+  const { login, user } = useAuth();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -18,6 +17,7 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {user ? <div>success! hello {user?.name}</div> : null}
       <div>
         <label htmlFor="username">User Name</label>
         <input type="text" id={'username'} />
