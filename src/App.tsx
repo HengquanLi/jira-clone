@@ -1,16 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 
-import { ListPage, Login } from './page';
-
 import { Test } from './components';
+import { useAuth } from 'context/auth-context';
+import AuthenticatedApp from 'AuthenticatedApp';
+import UnAuthenticatedApp from './unauthenticated-app/UnAuthenticatedApp';
 
 function App() {
+  const { user } = useAuth();
   return (
     <div className="App">
-      <ListPage />
-      <Login />
+      {user ? <AuthenticatedApp /> : <UnAuthenticatedApp />}
     </div>
   );
 }
