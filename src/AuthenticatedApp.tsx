@@ -6,7 +6,7 @@ const AuthenticatedApp = () => {
   const { logout } = useAuth();
   return (
     <div>
-      <button onClick={() => logout}>Logout</button>
+      <button onClick={logout}>Logout</button>
       <ListPage />
     </div>
   );

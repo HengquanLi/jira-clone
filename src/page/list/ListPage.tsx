@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react';
-import * as qs from 'qs';
-import { cleanObject } from '../../utils';
-import { useMount, useDebounce } from '../../utils';
-
+import { useEffect, useState } from 'react';
+import { useHttp } from 'utils/http';
 import { List, SearchPanel } from '../../components';
+import { cleanObject, useDebounce, useMount } from '../../utils';
 
 const apiUrl = process.env.REACT_APP_API_URL;
-
 
 const ListPage = () => {
   const [users, setUsers] = useState([]);
@@ -15,28 +12,31 @@ const ListPage = () => {
     personId: '',
   });
   const [projectsList, setProjectsList] = useState([]);
-  
-  const debounceProject = useDebounce(project, 2000);
 
+  const debounceProject = useDebounce(project, 2000);
+  const client = useHttp();
 
   useEffect(() => {
-    fetch(
-      `${apiUrl}/projects?${qs.stringify(
-        cleanObject(debounceProject)
-      )}`
-    ).then(async (res) => {
-      if (res.ok) {
-        setProjectsList(await res.json());
-      }
-    });
+    client('projects', { data: cleanObject(debounceProject) }).then(
+      setProjectsList
+    );
+    // fetch(
+    //   `${apiUrl}/projects?${qs.stringify(cleanObject(debounceProject))}`
+    // ).then(async (res) => {
+    //   if (res.ok) {
+    //     setProjectsList(await res.json());
+    //   }
+    // });
   }, [debounceProject]);
 
   useMount(() => {
-    fetch(`${apiUrl}/users`).then(async (res) => {
-      if (res.ok) {
-        setUsers(await res.json());
-      }
-    });
+    //then(setUsers) => then(res=>setUsers(res))
+    client('users').then(setUsers);
+    // fetch(`${apiUrl}/users`).then(async (res) => {
+    //   if (res.ok) {
+    //     setUsers(await res.json());
+    //   }
+    // });
   });
 
   return (
