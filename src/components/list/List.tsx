@@ -1,3 +1,4 @@
+import { Table } from 'antd';
 import React from 'react';
 import { User } from '../searchPanel/SearchPanel';
 
@@ -16,25 +17,28 @@ interface ListProps {
 
 const List = ({ users, projectsList }: ListProps) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Leader</th>
-        </tr>
-      </thead>
-      <tbody>
-        {projectsList.map((project) => (
-          <tr key={project.id}>
-            <td>{project.name}</td>
-            <td>
-              {users.find((user) => user.id === project.personId)?.name ||
-                '...'}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <Table
+      pagination={false}
+      columns={[
+        {
+          title: 'Title',
+          dataIndex: 'name',
+          sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
+          title: 'Leader',
+          render(value, project) {
+            return (
+              <span>
+                {users.find((user) => user.id === project.personId)?.name ||
+                  '...'}
+              </span>
+            );
+          },
+        },
+      ]}
+      dataSource={projectsList}
+    />
   );
 };
 

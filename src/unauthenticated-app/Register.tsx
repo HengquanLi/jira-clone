@@ -1,31 +1,36 @@
+import { Button, Form, Input } from 'antd';
+import { LongButton } from './UnAuthenticatedApp';
 import { useAuth } from 'context/auth-context';
 import React, { FormEvent } from 'react';
 
 const Register = () => {
-  const { register, user } = useAuth();
+   const { register, user } = useAuth();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const username = (event.currentTarget.elements[0] as HTMLInputElement)
-      .value;
-    const password = (event.currentTarget.elements[1] as HTMLInputElement)
-      .value;
-    register({ username, password });
-  };
+   const handleSubmit = (values: { username: string; password: string }) => {
+     register(values);
+   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">User Name</label>
-        <input type="text" id={'username'} />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input type="password" id={'password'} />
-      </div>
-      <button type="submit">Regist</button>
-    </form>
-  );
+   return (
+     <Form onFinish={handleSubmit}>
+       <Form.Item
+         name={'username'}
+         rules={[{ required: true, message: 'Username is required' }]}
+       >
+         <Input placeholder={'username'} type="text" id={'username'} />
+       </Form.Item>
+       <Form.Item
+         name={'password'}
+         rules={[{ required: true, message: 'Password is required' }]}
+       >
+         <Input placeholder={'password'} type="password" id={'password'} />
+       </Form.Item>
+       <Form.Item>
+         <LongButton type={'primary'} htmlType={'submit'}>
+           Register
+         </LongButton>
+       </Form.Item>
+     </Form>
+   );
 };
 
 export default Register;
