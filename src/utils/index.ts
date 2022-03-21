@@ -5,7 +5,7 @@ export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 export const cleanObject = (obj: object) => {
   const result = { ...obj };
   Object.keys(obj).forEach((key) => {
-    //@ts-ignore
+    // @ts-ignore
     const value = obj[key];
     if (isFalsy(value)) {
       //@ts-ignore
