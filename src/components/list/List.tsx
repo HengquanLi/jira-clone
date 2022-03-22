@@ -1,4 +1,5 @@
 import { Table } from 'antd';
+import dayjs from 'dayjs';
 import React from 'react';
 import { User } from '../searchPanel/SearchPanel';
 
@@ -8,6 +9,7 @@ interface Project {
   personId: string;
   organization: string;
   pin: boolean;
+  created:number;
 }
 
 interface ListProps {
@@ -26,6 +28,11 @@ const List = ({ users, projectsList }: ListProps) => {
           sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
+          title: 'Department',
+          dataIndex: 'organization',
+          sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
           title: 'Leader',
           render(value, project) {
             return (
@@ -36,6 +43,14 @@ const List = ({ users, projectsList }: ListProps) => {
             );
           },
         },
+        { 
+          title:'Reacted time',
+          render(value,project) {
+            return <span>
+              {project.created? dayjs(project.created).format('YYYY-MM-DD'):'...'}
+            </span>
+          }
+        }
       ]}
       dataSource={projectsList}
     />

@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { useHttp } from 'utils/http';
 import { List, SearchPanel } from '../../components';
@@ -40,11 +41,16 @@ const ListPage = () => {
   });
 
   return (
-    <div>
+    <Container>
+      <h1>Projects List</h1>
       <SearchPanel users={users} project={project} setProject={setProject} />
       <List users={users} projectsList={projectsList} />
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  padding: 3.2rem;
+`;
 
 export default ListPage;

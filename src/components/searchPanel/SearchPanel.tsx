@@ -1,5 +1,5 @@
-import { Input, Select } from 'antd';
-import React, { useState } from 'react';
+import { Form, Input, Select } from 'antd';
+import React from 'react';
 
 export interface User {
   id: string;
@@ -21,9 +21,10 @@ interface SearchPanelProps {
 
 const SearchPanel = ({ users, project, setProject }: SearchPanelProps) => {
   return (
-    <form action="">
-      <div>
+    <Form layout={'inline'} style={{ marginBottom: '2rem' }}>
+      <Form.Item>
         <Input
+          placeholder={'project name'}
           type="text"
           value={project.name}
           onChange={(event) =>
@@ -33,9 +34,11 @@ const SearchPanel = ({ users, project, setProject }: SearchPanelProps) => {
             })
           }
         />
+      </Form.Item>
+      <Form.Item>
         <Select
           value={project.personId}
-          onChange={value =>
+          onChange={(value) =>
             setProject({
               ...project,
               personId: value,
@@ -49,8 +52,8 @@ const SearchPanel = ({ users, project, setProject }: SearchPanelProps) => {
             </Select.Option>
           ))}
         </Select>
-      </div>
-    </form>
+      </Form.Item>
+    </Form>
   );
 };
 

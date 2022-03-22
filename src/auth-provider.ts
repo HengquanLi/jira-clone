@@ -13,36 +13,34 @@ export const handleUserResponse = ({ user }: { user: User }) => {
   return user;
 };
 
-export const login = (data: { username: string; password: string }) => {
-  return fetch(`${apiUrl}/login`, {
+export const login = async (data: { username: string; password: string }) => {
+  const res = await fetch(`${apiUrl}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(async (res: Response) => {
-    if (res.ok) {
-      return handleUserResponse(await res.json());
-    } else {
-      return Promise.reject(data);
-    }
   });
+  if (res.ok) {
+    return handleUserResponse(await res.json());
+  } else {
+    return Promise.reject(data);
+  }
 };
 
-export const register = (data: { username: string; password: string }) => {
-  return fetch(`${apiUrl}/register`, {
+export const register = async (data: { username: string; password: string }) => {
+  const res = await fetch(`${apiUrl}/register`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(async (res) => {
-    if (res.ok) {
-      return handleUserResponse(await res.json());
-    } else {
-      return Promise.reject(data);
-    }
   });
+  if (res.ok) {
+    return handleUserResponse(await res.json());
+  } else {
+    return Promise.reject(data);
+  }
 };
 
 export const logout = async () =>
