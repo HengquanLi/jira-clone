@@ -2,16 +2,17 @@ import styled from '@emotion/styled';
 import { useAuth } from 'context/auth-context';
 import { ListPage } from 'page';
 import React from 'react';
+import { Row } from './components';
 
 const AuthenticatedApp = () => {
   const { logout } = useAuth();
   return (
     <Container>
-      <Header>
-        <HeaderLeft>
-          <h3>Logo</h3>
-          <h3>Projects</h3>
-          <h3>User</h3>
+      <Header between={true}>
+        <HeaderLeft gap={true}>
+          <h2>Logo</h2>
+          <h2>Projects</h2>
+          <h2>User</h2>
         </HeaderLeft>
         <HeaderRight>
           <button onClick={logout}>Logout</button>
@@ -26,29 +27,15 @@ const AuthenticatedApp = () => {
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 6rem 1fr 6rem;
-  grid-template-columns: 20rem 1fr 20rem;
+  grid-template-rows: 6rem 1fr;
   height: 100vh;
-  grid-template-areas: 'header header header' 'nav main side' ;
 `;
 
-const Header = styled.header`
-  grid-area: header;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const HeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
+const Header = styled(Row)``;
+const HeaderLeft = styled(Row)``;
 const HeaderRight = styled.div``;
-
 const Main = styled.main`
-  grid-area: main;
+  /* display:flex; */
 `;
 
 export default AuthenticatedApp;
