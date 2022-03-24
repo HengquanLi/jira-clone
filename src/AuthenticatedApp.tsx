@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu } from 'antd';
 import { useAuth } from 'context/auth-context';
 import { ListPage } from 'page';
 import React from 'react';
@@ -24,12 +24,16 @@ const AuthenticatedApp = () => {
             overlay={
               <Menu>
                 <Menu.Item key={'logout'}>
-                  <a onClick={logout}>Logout</a>
+                  <Button type={'link'} onClick={logout}>
+                    Logout
+                  </Button>
                 </Menu.Item>
               </Menu>
             }
           >
-            <a onClick={(e) => e.preventDefault()}>Hi, {user?.name}</a>
+            <Button type={'link'} onClick={(e) => e.preventDefault()}>
+              Hi, {user?.name}
+            </Button>
           </Dropdown>
         </HeaderRight>
       </Header>

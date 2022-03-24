@@ -1,50 +1,30 @@
 import styled from '@emotion/styled';
-import { useEffect, useState } from 'react';
-import { useHttp } from 'utils/http';
-import { List, SearchPanel } from '../../components';
-import { cleanObject, useDebounce, useMount } from '../../utils';
-
-const apiUrl = process.env.REACT_APP_API_URL;
+import { List, SearchPanel } from 'components';
+import { useState } from 'react';
+import { useDebounce } from 'utils';
+import { useProjects } from 'utils/project';
+import { useUsers } from 'utils/user';
 
 const ListPage = () => {
-  const [users, setUsers] = useState([]);
   const [project, setProject] = useState({
     name: '',
     personId: '',
   });
-  const [projectsList, setProjectsList] = useState([]);
 
-  const debounceProject = useDebounce(project, 2000);
-  const client = useHttp();
+  const debounceProject = useDebounce(project, 200);
 
-  useEffect(() => {
-    client('projects', { data: cleanObject(debounceProject) }).then(
-      setProjectsList
-    );
-    // fetch(
-    //   `${apiUrl}/projects?${qs.stringify(cleanObject(debounceProject))}`
-    // ).then(async (res) => {
-    //   if (res.ok) {
-    //     setProjectsList(await res.json());
-    //   }
-    // });
-  }, [debounceProject]);
-
-  useMount(() => {
-    //then(setUsers) => then(res=>setUsers(res))
-    client('users').then(setUsers);
-    // fetch(`${apiUrl}/users`).then(async (res) => {
-    //   if (res.ok) {
-    //     setUsers(await res.json());
-    //   }
-    // });
-  });
+  const { isLoading, error, data: list } = useProjects(debounceProject);
+  const { data: users } = useUsers();
 
   return (
     <Container>
       <h1>Projects List</h1>
-      <SearchPanel users={users} project={project} setProject={setProject} />
-      <List users={users} projectsList={projectsList} />
+      <SearchPanel
+        users={users || []}
+        project={project}
+        setProject={setProject}
+      />
+      <List loading={isLoading} users={users || []} dataSource={list || []} />
     </Container>
   );
 };

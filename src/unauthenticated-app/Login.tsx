@@ -1,13 +1,15 @@
-import {  Form, Input } from 'antd';
-import {LongButton} from './UnAuthenticatedApp'
+import { Form, Input } from 'antd';
 import { useAuth } from 'context/auth-context';
-import React, { FormEvent } from 'react';
+import React from 'react';
+import { useAsync } from 'utils/use-async';
+import { LongButton } from './UnAuthenticatedApp';
 
-const Login = () => {
+const Login = ({ onError }: { onError: (error: Error) => void }) => {
   const { login, user } = useAuth();
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
 
-  const handleSubmit = (values: {username: string, password: string}) => {
-    login(values);
+  const handleSubmit = (values: { username: string; password: string }) => {
+    run(login(values)).catch(onError);
   };
 
   return (
@@ -25,7 +27,7 @@ const Login = () => {
         <Input placeholder={'password'} type="password" id={'password'} />
       </Form.Item>
       <Form.Item>
-        <LongButton type={'primary'} htmlType={'submit'}>
+        <LongButton loading={isLoading} type={'primary'} htmlType={'submit'}>
           Login
         </LongButton>
       </Form.Item>
