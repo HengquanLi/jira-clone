@@ -53,7 +53,7 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?:typeof defaul
       })
       .catch((error) => {
         setError(error);
-        if(config.trhowOnError)
+        if(config.throwOnError) {}
         return Promise.reject(error);
         return error
       });
