@@ -1,24 +1,26 @@
-import React, { ReactNode, useState } from 'react';
-
-import * as auth from '../auth-provider';
+import FullPageLoading from 'components/fullPageLoading/FullPageLoading';
 import { User } from 'components/searchPanel/SearchPanel';
-import { http } from 'utils/http';
+import React, { ReactNode, useState } from 'react';
 import { useMount } from 'utils';
+import { http } from 'utils/http';
+import { useAsync } from 'utils/use-async';
+import * as auth from 'auth-provider';
+import FullPageErrorFallback from 'components/fullPageErrorFallback/FullPageErrorFallback';
 
 interface AuthForm {
   username: string;
   password: string;
 }
 
-const bootstrapUser = async()=>{
-  let user=null;
-  const token =auth.getToken()
-  if(token){
-    const data = await http('me',{token})
-    user =data.user
+const bootstrapUser = async () => {
+  let user = null;
+  const token = auth.getToken();
+  if (token) {
+    const data = await http('me', { token });
+    user = data.user;
   }
-  return user
-}
+  return user;
+};
 
 const AuthContext = React.createContext<
   | {
@@ -33,7 +35,17 @@ const AuthContext = React.createContext<
 AuthContext.displayName = 'AuthContext';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const {
+    data: user,
+    error,
+    isLoading,
+    isIdle,
+    isError,
+    run,
+    setData: setUser,
+  } = useAsync<User | null>();
+
+  
   const login = (form: AuthForm) =>
     // auth.login(form).then((user) => setUser(user)); Or below statement
     auth.login(form).then(setUser);
@@ -42,9 +54,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     auth.register(form).then(setUser);
   const logout = () => auth.logout().then(() => setUser(null));
 
-  useMount(()=>{
-    bootstrapUser().then(setUser)
-  })
+  useMount(() => {
+    run(bootstrapUser())
+  });
+
+  if(isIdle||isLoading){
+    return <FullPageLoading />
+  }
+
+  if(isError){
+    return <FullPageErrorFallback error={error}/>
+  }
 
   return (
     <AuthContext.Provider

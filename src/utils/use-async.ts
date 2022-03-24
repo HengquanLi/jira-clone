@@ -1,11 +1,13 @@
 import { useState } from 'react';
 
+//State interface
 interface State<D> {
   error: Error | null;
   data: D | null;
   stat: 'idle' | 'loading' | 'error' | 'success';
 }
 
+//default State
 const defaultInitialState: State<null> = {
   stat: 'idle',
   data: null,
@@ -16,7 +18,7 @@ const defaultInitialState: State<null> = {
    throwOnError: false,
  };
 
-
+//useAuth hook to handle loading status and error
 export const useAsync = <D>(initialState?: State<D>,initialConfig?:typeof defaultConfig) => {
   const config = { ...defaultConfig, initialConfig };
   const [state, setState] = useState<State<D>>({
@@ -37,8 +39,6 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?:typeof defaul
       stat: 'error',
       data: null,
     });
-
-   
 
   // run to active asynchronous request
   const run = (promise: Promise<D>) => {
