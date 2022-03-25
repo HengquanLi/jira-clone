@@ -2,7 +2,7 @@ import { Form, Input } from 'antd';
 import { useAuth } from 'context/auth-context';
 import React from 'react';
 import { useAsync } from 'utils/use-async';
-import { LongButton } from './UnAuthenticatedApp';
+import { LongButton } from 'components';
 
 const Register = ({ onError }: { onError: (error: Error) => void }) => {
   const { register, user } = useAuth();

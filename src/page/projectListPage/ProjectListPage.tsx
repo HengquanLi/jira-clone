@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { List, SearchPanel } from 'components';
 import { useState } from 'react';
-import { useDebounce } from 'utils';
+import { useDebounce, useDocumentTitle } from 'utils';
 import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 
-const ListPage = () => {
+const ProjectListPage = () => {
   const [project, setProject] = useState({
     name: '',
     personId: '',
@@ -15,7 +15,7 @@ const ListPage = () => {
 
   const { isLoading, error, data: list } = useProjects(debounceProject);
   const { data: users } = useUsers();
-
+  useDocumentTitle('Project List', false);
   return (
     <Container>
       <h1>Projects List</h1>
@@ -33,4 +33,4 @@ const Container = styled.div`
   padding: 3.2rem;
 `;
 
-export default ListPage;
+export default ProjectListPage;

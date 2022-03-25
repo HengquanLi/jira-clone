@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
@@ -33,7 +33,7 @@ export const useDebounce = <V>(value: V, delay?: number) => {
   return debouncedValue;
 };
 
-//test custom array operation hook
+//custom array operation hook
 export const useArray = <T>(initialArray: T[]) => {
   const [value, setValue] = useState(initialArray);
   return {
@@ -48,3 +48,24 @@ export const useArray = <T>(initialArray: T[]) => {
     },
   };
 };
+
+//a hook to change title content when
+
+export const useDocumentTitle = (
+  title: string,
+  keepOnMount: boolean = true
+) => {
+  const initialTitle = useRef(document.title).current;
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    return () => {
+      if (!keepOnMount) document.title = initialTitle;
+    };
+  }, [initialTitle, keepOnMount]);
+};
+
+export const resetRoute = () => (window.location.href = window.location.origin);

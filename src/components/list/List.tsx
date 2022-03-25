@@ -1,6 +1,7 @@
 import { Table, TableProps } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { User } from '../searchPanel/SearchPanel';
 
 export interface Project {
@@ -9,10 +10,10 @@ export interface Project {
   personId: string;
   organization: string;
   pin: boolean;
-  created:number;
+  created: number;
 }
 
-interface ListProps extends TableProps<Project>{
+interface ListProps extends TableProps<Project> {
   users: User[];
 }
 
@@ -23,8 +24,10 @@ const List = ({ users, ...props }: ListProps) => {
       columns={[
         {
           title: 'Title',
-          dataIndex: 'name',
           sorter: (a, b) => a.name.localeCompare(b.name),
+          render(value, project) {
+            return <Link to={`${String(project.id)}/dashboard`}>{project.name}</Link>;
+          },
         },
         {
           title: 'Department',
@@ -42,14 +45,18 @@ const List = ({ users, ...props }: ListProps) => {
             );
           },
         },
-        { 
-          title:'Reacted time',
-          render(value,project) {
-            return <span>
-              {project.created? dayjs(project.created).format('YYYY-MM-DD'):'...'}
-            </span>
-          }
-        }
+        {
+          title: 'Reacted time',
+          render(value, project) {
+            return (
+              <span>
+                {project.created
+                  ? dayjs(project.created).format('YYYY-MM-DD')
+                  : '...'}
+              </span>
+            );
+          },
+        },
       ]}
       {...props}
     />

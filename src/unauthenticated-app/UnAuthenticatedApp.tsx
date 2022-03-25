@@ -4,13 +4,14 @@ import left from 'assets/left.svg';
 import logo from 'assets/logo.svg';
 import right from 'assets/right.svg';
 import React, { useState } from 'react';
+import { useDocumentTitle } from 'utils';
 import Login from './Login';
 import Register from './Register';
 
 const UnAuthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-
+  useDocumentTitle('Please register or login to continue.');
   return (
     <Container>
       <Header />
@@ -34,9 +35,6 @@ const UnAuthenticatedApp = () => {
   );
 };
 
-export const LongButton = styled(Button)`
-  width: 100%;
-`;
 
 const Title = styled.h2`
   margin-bottom: 2.4rem;
