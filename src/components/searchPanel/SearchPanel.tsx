@@ -12,24 +12,24 @@ export interface User {
 
 interface SearchPanelProps {
   users: User[];
-  project: {
+  param: {
     name: string;
     personId: string;
   };
-  setProject: (project: SearchPanelProps['project']) => void;
+  setParam: (param: SearchPanelProps['param']) => void;
 }
 
-const SearchPanel = ({ users, project, setProject }: SearchPanelProps) => {
+const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
   return (
     <Form layout={'inline'} style={{ marginBottom: '2rem' }}>
       <Form.Item>
         <Input
           placeholder={'project name'}
           type="text"
-          value={project.name}
+          value={param.name}
           onChange={(event) =>
-            setProject({
-              ...project,
+            setParam({
+              ...param,
               name: event.target.value,
             })
           }
@@ -37,17 +37,17 @@ const SearchPanel = ({ users, project, setProject }: SearchPanelProps) => {
       </Form.Item>
       <Form.Item>
         <Select
-          value={project.personId}
+          value={param.personId}
           onChange={(value) =>
-            setProject({
-              ...project,
+            setParam({
+              ...param,
               personId: value,
             })
           }
         >
           <Select.Option value={''}>Leader</Select.Option>
           {users.map((user) => (
-            <Select.Option key={user.id} value={user.id}>
+            <Select.Option key={user.id} value={String(user.id)}>
               {user.name}
             </Select.Option>
           ))}
