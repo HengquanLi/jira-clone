@@ -14,6 +14,7 @@ const ProjectListPage = () => {
   const { isLoading, error, data: list } = useProjects(debounceProject);
   const { data: users } = useUsers();
   useDocumentTitle('Project List', false);
+  
   return (
     <Container>
       <h1>Projects List</h1>

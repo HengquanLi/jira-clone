@@ -55,6 +55,7 @@ export const useDocumentTitle = (
   title: string,
   keepOnMount: boolean = true
 ) => {
+  
   const initialTitle = useRef(document.title).current;
 
   useEffect(() => {
