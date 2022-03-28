@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useUrlQueryParam } from 'utils/url';
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
@@ -55,7 +56,6 @@ export const useDocumentTitle = (
   title: string,
   keepOnMount: boolean = true
 ) => {
-  
   const initialTitle = useRef(document.title).current;
 
   useEffect(() => {
@@ -70,3 +70,19 @@ export const useDocumentTitle = (
 };
 
 export const resetRoute = () => (window.location.href = window.location.origin);
+
+
+//a hook to get project list param
+export const useProjectsSearchParam = () => {
+  const [param, setParam] = useUrlQueryParam(['name', 'personId']);
+  return [
+    useMemo(
+      () => ({
+        ...param,
+        personId: Number(param.personId) || undefined,
+      }),
+      [param]
+    ),
+    setParam,
+  ] as const;
+};

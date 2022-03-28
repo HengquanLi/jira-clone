@@ -14,17 +14,22 @@ const defaultInitialState: State<null> = {
   error: null,
 };
 
- const defaultConfig = {
-   throwOnError: false,
- };
+const defaultConfig = {
+  throwOnError: false,
+};
 
 //useAuth hook to handle loading status and error
-export const useAsync = <D>(initialState?: State<D>,initialConfig?:typeof defaultConfig) => {
-  const config = { ...defaultConfig, initialConfig };
+export const useAsync = <D>(
+  initialState?: State<D>,
+  initialConfig?: typeof defaultConfig
+) => {
+  const config = { ...defaultConfig, ...initialConfig };
   const [state, setState] = useState<State<D>>({
     ...defaultInitialState,
     ...initialState,
   });
+
+  const [retry, setRetry] = useState(() => () => {});
 
   const setData = (data: D) =>
     setState({
@@ -41,10 +46,18 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?:typeof defaul
     });
 
   // run to active asynchronous request
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { retry: () => Promise<D> }
+  ) => {
     if (!promise || !promise.then) {
       throw new Error('Please pass Promise type data');
     }
+    setRetry(() => () => {
+      if (runConfig?.retry) {
+        run(runConfig?.retry(), runConfig);
+      }
+    });
     setState({ ...state, stat: 'loading' });
     return promise
       .then((data) => {
@@ -53,9 +66,10 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?:typeof defaul
       })
       .catch((error) => {
         setError(error);
-        if(config.throwOnError) {}
+        if (config.throwOnError) {
+        }
         return Promise.reject(error);
-        return error
+        // return error
       });
   };
   return {
@@ -66,6 +80,7 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?:typeof defaul
     run,
     setData,
     setError,
+    retry,
     ...state,
   };
 };

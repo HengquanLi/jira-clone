@@ -22,12 +22,12 @@ if select default type, onChange will return undefined
  */
 
 const IdSelect = (props: IdSelectProps) => {
-  const { value, onChange, defaultOptionName, options,...restProps } = props;
+  const { value, onChange, defaultOptionName, options, ...restProps } = props;
   const toNumber = (value: unknown) =>
     isNaN(Number(value)) ? 0 : Number(value);
   return (
     <Select
-      value={value}
+      value={options?.length ? toNumber(value) : 0}
       onChange={(value) => onChange(toNumber(value) || undefined)}
       {...restProps}
     >
