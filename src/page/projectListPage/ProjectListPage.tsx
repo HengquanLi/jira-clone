@@ -17,6 +17,7 @@ const ProjectListPage = () => {
   } = useProjects(useDebounce(param, 200));
   const { data: users } = useUsers();
 
+  // console.log(list)
   return (
     <Container>
       <h1>Projects List</h1>

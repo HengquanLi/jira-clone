@@ -29,6 +29,7 @@ export const useAsync = <D>(
     ...initialState,
   });
 
+  //reactjs.org/docs/hooks-reference.html#usestate. Lazy initail state
   const [retry, setRetry] = useState(() => () => {});
 
   const setData = (data: D) =>
