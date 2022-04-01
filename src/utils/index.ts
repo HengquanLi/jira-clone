@@ -71,7 +71,6 @@ export const useDocumentTitle = (
 
 export const resetRoute = () => (window.location.href = window.location.origin);
 
-
 //a hook to get project list param
 export const useProjectsSearchParam = () => {
   const [param, setParam] = useUrlQueryParam(['name', 'personId']);
@@ -85,4 +84,17 @@ export const useProjectsSearchParam = () => {
     ),
     setParam,
   ] as const;
+};
+/**
+ * return component mounting status, if not mounted or unmounted return false, otherwise return true
+ */
+export const useMountedRef = () => {
+  const mountedRef = useRef(false);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  });
+  return mountedRef;
 };

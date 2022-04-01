@@ -1,13 +1,18 @@
 import styled from '@emotion/styled';
+import { Button } from 'antd';
 import { Header } from 'components';
+import ProjectModal from 'components/projectModal/ProjectModal';
 import { ProjectListPage, ProjectPage } from 'page';
-import React from 'react';
+import React, { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 const AuthenticatedApp = () => {
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+
   return (
     <Container>
+      {/* <Button onClick={()=>setProjectModalOpen(true)}>Test button</Button> */}
       <Router>
         <Header />
         <Main>
@@ -18,6 +23,10 @@ const AuthenticatedApp = () => {
           </Routes>
         </Main>
       </Router>
+      <ProjectModal
+        projectModalOpen={projectModalOpen}
+        onClose={() => setProjectModalOpen(false)}
+      />
     </Container>
   );
 };

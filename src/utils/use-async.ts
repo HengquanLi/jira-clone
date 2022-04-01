@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMountedRef } from 'utils';
 
 //State interface
 interface State<D> {
@@ -28,7 +29,7 @@ export const useAsync = <D>(
     ...defaultInitialState,
     ...initialState,
   });
-
+  const mountedRef = useMountedRef();
   //reactjs.org/docs/hooks-reference.html#usestate. Lazy initail state
   const [retry, setRetry] = useState(() => () => {});
 
@@ -62,7 +63,8 @@ export const useAsync = <D>(
     setState({ ...state, stat: 'loading' });
     return promise
       .then((data) => {
-        setData(data);
+        //if component is unmounted then stop data setting
+        if (mountedRef.current) setData(data);
         return data;
       })
       .catch((error) => {

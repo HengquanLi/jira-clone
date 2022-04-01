@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import { Button, Dropdown, Menu } from 'antd';
 import { ReactComponent as AppLogo } from 'assets/software-logo.svg';
+import ButtonNoPadding from 'components/buttonNoPadding/ButtonNoPadding';
+import ProjectPopover from 'components/projectPopover/ProjectPopover';
 import Row from 'components/row/Row';
 import { useAuth } from 'context/auth-context';
 import React from 'react';
-import {resetRoute} from 'utils'
+import { resetRoute } from 'utils';
 
 const Header = () => {
   const { logout, user } = useAuth();
@@ -13,31 +15,39 @@ const Header = () => {
     <HeaderContainer between={true}>
       <HeaderLeft gap={true}>
         {/* import svg as a component to styling */}
-        <Button type={'link'} onClick={resetRoute}>
+        <ButtonNoPadding type={'link'} onClick={resetRoute}>
           <AppLogo width={'18rem'} color={'rgb(38,132,255)'} />
-        </Button>
+        </ButtonNoPadding>
+        <ProjectPopover />
         {/* <img src={appLogo} alt="jira" /> */}
-        <h2>Projects</h2>
-        <h2>User</h2>
+
+        <span>User</span>
       </HeaderLeft>
       <HeaderRight>
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key={'logout'}>
-                <Button type={'link'} onClick={logout}>
-                  Logout
-                </Button>
-              </Menu.Item>
-            </Menu>
-          }
-        >
-          <Button type={'link'} onClick={(e) => e.preventDefault()}>
-            Hi, {user?.name}
-          </Button>
-        </Dropdown>
+        <User />
       </HeaderRight>
     </HeaderContainer>
+  );
+};
+
+const User = () => {
+  const { logout, user } = useAuth();
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item key={'logout'}>
+            <Button type={'link'} onClick={logout}>
+              Logout
+            </Button>
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <Button type={'link'} onClick={(e) => e.preventDefault()}>
+        Hi, {user?.name}
+      </Button>
+    </Dropdown>
   );
 };
 
