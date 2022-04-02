@@ -1,11 +1,14 @@
 import styled from '@emotion/styled';
-import { Typography } from 'antd';
-import { List, SearchPanel } from 'components';
+import { Button, Typography } from 'antd';
+import { List, Row, SearchPanel } from 'components';
+import ButtonNoPadding from 'components/buttonNoPadding/ButtonNoPadding';
 import { useDebounce, useDocumentTitle, useProjectsSearchParam } from 'utils';
 import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 
-const ProjectListPage = () => {
+const ProjectListPage = (props: {
+  projectButton: JSX.Element
+}) => {
   useDocumentTitle('Project List', false);
 
   const [param, setParam] = useProjectsSearchParam();
@@ -20,12 +23,21 @@ const ProjectListPage = () => {
   // console.log(list)
   return (
     <Container>
-      <h1>Projects List</h1>
+      <Row between={true}>
+        <h1>Projects List</h1>
+        {/* <Button onClick={() => props.setProjectModalOpen(true)}>
+          Create Project
+        </Button> */}
+        {props.projectButton}
+      </Row>
+
       <SearchPanel users={users || []} param={param} setParam={setParam} />
       {error ? (
         <Typography.Text type={'danger'}>{error.message}</Typography.Text>
       ) : null}
       <List
+        // setProjectModalOpen={props.setProjectModalOpen}
+        projectButton={props.projectButton}
         refresh={retry}
         loading={isLoading}
         users={users || []}

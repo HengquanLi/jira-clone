@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Button } from 'antd';
 import { Header } from 'components';
+import ButtonNoPadding from 'components/buttonNoPadding/ButtonNoPadding';
 import ProjectModal from 'components/projectModal/ProjectModal';
 import { ProjectListPage, ProjectPage } from 'page';
 import React, { useState } from 'react';
@@ -12,13 +13,37 @@ const AuthenticatedApp = () => {
 
   return (
     <Container>
-      {/* <Button onClick={()=>setProjectModalOpen(true)}>Test button</Button> */}
+      {/* <Button onClick={() => setProjectModalOpen(true)}>Test button</Button> */}
       <Router>
-        <Header />
+        {/* <Header setProjectModalOpen={setProjectModalOpen} /> */}
+        <Header
+          projectButton={
+            <ButtonNoPadding
+              type="link"
+              onClick={() => setProjectModalOpen(true)}
+            >
+              Create New Project
+            </ButtonNoPadding>
+          }
+        />
         <Main>
           <Routes>
             <Route path="/" element={<Navigate to="/projects" replace />} />
-            <Route path="/projects" element={<ProjectListPage />} />
+            <Route
+              path="/projects"
+              element={
+                <ProjectListPage
+                  projectButton={
+                    <ButtonNoPadding
+                      type="link"
+                      onClick={() => setProjectModalOpen(true)}
+                    >
+                      Create New Project
+                    </ButtonNoPadding>
+                  }
+                />
+              }
+            />
             <Route path="/projects/:projectId/*" element={<ProjectPage />} />
           </Routes>
         </Main>
