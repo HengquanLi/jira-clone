@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import { useMountedRef } from 'utils';
 
 //State interface
@@ -19,29 +19,50 @@ const defaultConfig = {
   throwOnError: false,
 };
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+
+  return useCallback(
+    (...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0),
+    [dispatch, mountedRef]
+  );
+};
+
 //useAuth hook to handle loading status and error
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig
 ) => {
   const config = { ...defaultConfig, ...initialConfig };
-  const [state, setState] = useState<State<D>>({
-    ...defaultInitialState,
-    ...initialState,
-  });
-  const mountedRef = useMountedRef();
+
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...defaultInitialState,
+      ...initialState,
+    }
+  );
+
+  // const [state, setState] = useState<State<D>>({
+  //   ...defaultInitialState,
+  //   ...initialState,
+  // });
+  // const mountedRef = useMountedRef();
   //reactjs.org/docs/hooks-reference.html#usestate. Lazy initail state
+
+  const safeDispatch = useSafeDispatch(dispatch);
+
   const [retry, setRetry] = useState(() => () => {});
 
   const setData = (data: D) =>
-    setState({
+    safeDispatch({
       data,
       stat: 'success',
       error: null,
     });
 
   const setError = (error: Error) =>
-    setState({
+    safeDispatch({
       error,
       stat: 'error',
       data: null,
@@ -60,11 +81,11 @@ export const useAsync = <D>(
         run(runConfig?.retry(), runConfig);
       }
     });
-    setState({ ...state, stat: 'loading' });
+    safeDispatch({ stat: 'loading' });
     return promise
       .then((data) => {
         //if component is unmounted then stop data setting
-        if (mountedRef.current) setData(data);
+       setData(data);
         return data;
       })
       .catch((error) => {
