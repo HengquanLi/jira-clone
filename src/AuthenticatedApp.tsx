@@ -17,14 +17,14 @@ const AuthenticatedApp = () => {
       <Router>
         {/* <Header setProjectModalOpen={setProjectModalOpen} /> */}
         <Header
-          projectButton={
-            <ButtonNoPadding
-              type="link"
-              onClick={() => setProjectModalOpen(true)}
-            >
-              Create New Project
-            </ButtonNoPadding>
-          }
+          // projectButton={
+          //   // <ButtonNoPadding
+          //   //   type="link"
+          //   //   onClick={() => setProjectModalOpen(true)}
+          //   // >
+          //   //   Create New Project
+          //   // </ButtonNoPadding>
+          // }
         />
         <Main>
           <Routes>
@@ -49,8 +49,8 @@ const AuthenticatedApp = () => {
         </Main>
       </Router>
       <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
+        // projectModalOpen={projectModalOpen}
+        // onClose={() => setProjectModalOpen(false)}
       />
     </Container>
   );

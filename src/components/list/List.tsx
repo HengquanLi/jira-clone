@@ -2,7 +2,9 @@ import { Dropdown, Menu, Table, TableProps } from 'antd';
 import ButtonNoPadding from 'components/buttonNoPadding/ButtonNoPadding';
 import Pin from 'components/pin/Pin';
 import dayjs from 'dayjs';
+import { projectListActions } from 'page/projectListPage/projectList.slice';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useEditProject } from 'utils/project';
 import { User } from '../searchPanel/SearchPanel';
@@ -23,6 +25,7 @@ interface ListProps extends TableProps<Project> {
 }
 
 const List = ({ users, ...props }: ListProps) => {
+  const dispatch = useDispatch()
   // console.log(users)
   const { mutate } = useEditProject();
   const pinProject = (id: number) => (pin: boolean) =>
@@ -87,8 +90,8 @@ const List = ({ users, ...props }: ListProps) => {
                 overlay={
                   <Menu>
                     <Menu.Item key={'edit'}>
-                      {/* <ButtonNoPadding type='link' onClick={() =>props.setProjectModalOpen(true)}>Edit...</ButtonNoPadding> */}
-                      {props.projectButton}
+                      <ButtonNoPadding type='link' onClick={() =>dispatch(projectListActions.openProjectModal())}>Edit...</ButtonNoPadding>
+                      {/* {props.projectButton} */}
                     </Menu.Item>
                   </Menu>
                 }
