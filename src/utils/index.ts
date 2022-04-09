@@ -85,6 +85,16 @@ export const useProjectsSearchParam = () => {
     setParam,
   ] as const;
 };
+
+export const useProjectModal = () => {
+  const [{ projectCreate }, setProjectModalOpen] = useUrlQueryParam([
+    'projectCreate',
+  ]);
+  const open = () => setProjectModalOpen({ projectCreate: true });
+  const close = () => setProjectModalOpen({ projectCreate: undefined });
+
+  return { projectModalOpen: projectCreate === 'true', open, close };
+};
 /**
  * return component mounting status, if not mounted or unmounted return false, otherwise return true
  */

@@ -8,7 +8,7 @@ import { useAuth } from 'context/auth-context';
 import React from 'react';
 import { resetRoute } from 'utils';
 
-const Header = (props: { projectButton: JSX.Element }) => {
+const Header = () => {
   const { logout, user } = useAuth();
 
   return (
@@ -18,7 +18,7 @@ const Header = (props: { projectButton: JSX.Element }) => {
         <ButtonNoPadding type={'link'} onClick={resetRoute}>
           <AppLogo width={'18rem'} color={'rgb(38,132,255)'} />
         </ButtonNoPadding>
-        <ProjectPopover {...props} />
+        <ProjectPopover />
         {/* <img src={appLogo} alt="jira" /> */}
 
         <span>User</span>

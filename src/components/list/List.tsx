@@ -4,6 +4,7 @@ import Pin from 'components/pin/Pin';
 import dayjs from 'dayjs';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useProjectModal } from 'utils';
 import { useEditProject } from 'utils/project';
 import { User } from '../searchPanel/SearchPanel';
 
@@ -19,11 +20,12 @@ export interface Project {
 interface ListProps extends TableProps<Project> {
   users: User[];
   refresh?: () => void;
-  projectButton: JSX.Element
+  // projectButton: JSX.Element;
 }
 
 const List = ({ users, ...props }: ListProps) => {
   // console.log(users)
+  const { open } = useProjectModal();
   const { mutate } = useEditProject();
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then(props.refresh);
@@ -87,8 +89,10 @@ const List = ({ users, ...props }: ListProps) => {
                 overlay={
                   <Menu>
                     <Menu.Item key={'edit'}>
-                      {/* <ButtonNoPadding type='link' onClick={() =>props.setProjectModalOpen(true)}>Edit...</ButtonNoPadding> */}
-                      {props.projectButton}
+                      <ButtonNoPadding type="link" onClick={open}>
+                        Edit...
+                      </ButtonNoPadding>
+                      {/* {props.projectButton} */}
                     </Menu.Item>
                   </Menu>
                 }
