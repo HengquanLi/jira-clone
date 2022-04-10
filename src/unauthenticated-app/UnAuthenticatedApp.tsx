@@ -3,6 +3,7 @@ import { Button, Card, Divider, Typography } from 'antd';
 import left from 'assets/left.svg';
 import logo from 'assets/logo.svg';
 import right from 'assets/right.svg';
+import ErrorBox from 'components/errorBox/ErrorBox';
 import React, { useState } from 'react';
 import { useDocumentTitle } from 'utils';
 import Login from './Login';
@@ -18,9 +19,7 @@ const UnAuthenticatedApp = () => {
       <Background />
       <ShadowCard>
         <Title>{isRegister ? 'Please register' : 'Please login'}</Title>
-        {error ? (
-          <Typography.Text type={'danger'}>{error.message}</Typography.Text>
-        ) : null}
+        <ErrorBox error={error}/>
         {isRegister ? (
           <Register onError={setError} />
         ) : (

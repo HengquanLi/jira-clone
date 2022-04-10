@@ -1,11 +1,11 @@
-import { Typography } from 'antd';
+import ErrorBox from 'components/errorBox/ErrorBox';
 import FullPage from 'components/fullPage/FullPage';
 import React from 'react';
 
 const FullPageErrorFallback = ({ error }: { error: Error | null }) => {
   return (
     <FullPage>
-      <Typography.Text type={'danger'}>{error?.message}</Typography.Text>
+      <ErrorBox error={error} />
     </FullPage>
   );
 };

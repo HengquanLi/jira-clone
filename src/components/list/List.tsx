@@ -28,7 +28,7 @@ const List = ({ users, ...props }: ListProps) => {
   const { open } = useProjectModal();
   const { mutate } = useEditProject();
   const pinProject = (id: number) => (pin: boolean) =>
-    mutate({ id, pin }).then(props.refresh);
+    mutate({ id, pin });
   return (
     <Table
       rowKey={'id'}
