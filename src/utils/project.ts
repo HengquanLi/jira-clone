@@ -47,7 +47,7 @@ export const useAddProject = () => {
 
   return useMutation(
     (params: Partial<Project>) =>
-      client(`projects/${params.id}`, { data: params, method: 'POST' }),
+      client('projects', { data: params, method: 'POST' }),
     { onSuccess: () => queryClient.invalidateQueries('projects') }
   );
   // const { run, ...asyncResult } = useAsync();
@@ -58,4 +58,15 @@ export const useAddProject = () => {
   //   mutate,
   //   ...asyncResult,
   // };
+};
+
+export const useGetProject = (id?: number) => {
+  const client = useHttp();
+  return useQuery<Project>(
+    ['projects', { id }],
+    () => client(`projects/${id}`),
+    {
+      enabled: Boolean(id),
+    }
+  );
 };

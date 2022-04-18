@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useUrlQueryParam } from 'utils/url';
+import { useGetProject } from './project';
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
@@ -87,13 +88,33 @@ export const useProjectsSearchParam = () => {
 };
 
 export const useProjectModal = () => {
-  const [{ projectCreate }, setProjectModalOpen] = useUrlQueryParam([
+  const [{ projectCreate }, setProjectCreate] = useUrlQueryParam([
     'projectCreate',
   ]);
-  const open = () => setProjectModalOpen({ projectCreate: true });
-  const close = () => setProjectModalOpen({ projectCreate: undefined });
+  const [{ editingProjectId }, setEditingProjectId] = useUrlQueryParam([
+    'editingProjectId'
+  ]);
 
-  return { projectModalOpen: projectCreate === 'true', open, close };
+  const { data: editingProject, isLoading } = useGetProject(
+    Number(editingProjectId)
+  );
+
+  const open = () => setProjectCreate({ projectCreate: true });
+  const close = () => {
+    setProjectCreate({ projectCreate: undefined });
+    setEditingProjectId({ editingProjectId: undefined });
+  };
+  const startEdit = (id: number) =>
+    setEditingProjectId({ editingProjectId: id });
+
+  return {
+    projectModalOpen: projectCreate === 'true' || Boolean(editingProjectId),
+    open,
+    close,
+    startEdit,
+    editingProject,
+    isLoading,
+  };
 };
 /**
  * return component mounting status, if not mounted or unmounted return false, otherwise return true

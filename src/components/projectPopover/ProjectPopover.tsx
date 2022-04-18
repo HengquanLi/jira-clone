@@ -14,8 +14,8 @@ const ProjectPopover = () => {
     <ContentContainer>
       <Typography.Text>Saved Project</Typography.Text>
       <List>
-        {pinnedProjects?.map((project) => (
-          <List.Item>
+        {pinnedProjects?.map((project,index) => (
+          <List.Item key={index}>
             <List.Item.Meta title={project.name} />
           </List.Item>
         ))}
