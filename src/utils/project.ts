@@ -1,5 +1,6 @@
 import { Project } from 'components/list/List';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useProjectsSearchParam } from 'utils';
 import { useHttp } from 'utils/http';
 
 export const useProjects = (param?: Partial<Project>) => {
@@ -22,11 +23,31 @@ export const useProjects = (param?: Partial<Project>) => {
 export const useEditProject = () => {
   const client = useHttp();
   const queryClient = useQueryClient();
+  const [searchParams] = useProjectsSearchParam();
+  const queryKey = ['projects', searchParams];
 
   return useMutation(
     (params: Partial<Project>) =>
       client(`projects/${params.id}`, { data: params, method: 'PATCH' }),
-    { onSuccess: () => queryClient.invalidateQueries('projects') }
+    {
+      onSuccess: () => queryClient.invalidateQueries(queryKey),
+      //optimistic update
+      async onMutate(target) {
+        const previousItem = queryClient.getQueryData(queryKey);
+        queryClient.setQueryData(queryKey, (old?: Project[]) => {
+          return (
+            old?.map((project) =>
+              project.id === target.id ? { ...project, ...target } : project
+            ) || []
+          );
+        });
+        return { previousItem };
+      },
+      //if error happens, roll back
+      onError(error, newItem, context) {
+        queryClient.setQueryData(queryKey, (context as {previousItem:Project[]}).previousItem);
+      },
+    }
   );
 
   // const { run, ...asyncResult } = useAsync();
