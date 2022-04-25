@@ -4,14 +4,14 @@ import { useForm } from 'antd/lib/form/Form';
 import ErrorBox from 'components/errorBox/ErrorBox';
 import UserSelect from 'components/userSelect/UserSelect';
 import React, { useEffect } from 'react';
-import { useProjectModal } from 'utils';
+import { useProjectModal, useProjectsQueryKey } from 'utils';
 import { useAddProject, useEditProject } from 'utils/project';
 
 const ProjectModal = () => {
   const { projectModalOpen, close, isLoading, editingProject } =
     useProjectModal();
   const useMutateProject = editingProject ? useEditProject : useAddProject;
-  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject();
+  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject(useProjectsQueryKey());
 
   const [form] = useForm();
   const onFinish = (values: any) => {

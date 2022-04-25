@@ -1,6 +1,6 @@
 //if use firebase or Auth0, this file will not be used
 
-import { User } from 'components/searchPanel/SearchPanel';
+import { User } from "types/User";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 

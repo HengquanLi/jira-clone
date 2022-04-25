@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useUrlQueryParam } from 'utils/url';
+import { useSetUrlSearchParams, useUrlQueryParam } from 'utils/url';
 import { useGetProject } from './project';
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
@@ -51,7 +51,7 @@ export const useArray = <T>(initialArray: T[]) => {
   };
 };
 
-//a hook to change title content when
+//a hook to set title content 
 
 export const useDocumentTitle = (
   title: string,
@@ -87,23 +87,25 @@ export const useProjectsSearchParam = () => {
   ] as const;
 };
 
+export const useProjectsQueryKey = () => {
+  const [params] = useProjectsSearchParam();
+  return ['projects', params];
+};
+
 export const useProjectModal = () => {
   const [{ projectCreate }, setProjectCreate] = useUrlQueryParam([
     'projectCreate',
   ]);
   const [{ editingProjectId }, setEditingProjectId] = useUrlQueryParam([
-    'editingProjectId'
+    'editingProjectId',
   ]);
-
+  const setUrlParams = useSetUrlSearchParams();
   const { data: editingProject, isLoading } = useGetProject(
     Number(editingProjectId)
   );
 
   const open = () => setProjectCreate({ projectCreate: true });
-  const close = () => {
-    setProjectCreate({ projectCreate: undefined });
-    setEditingProjectId({ editingProjectId: undefined });
-  };
+  const close = () => setUrlParams({ projectCreate: '', editingProjectId: '' });
   const startEdit = (id: number) =>
     setEditingProjectId({ editingProjectId: id });
 

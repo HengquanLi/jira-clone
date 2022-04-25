@@ -1,21 +1,13 @@
-import { Dropdown, Menu, Table, TableProps } from 'antd';
+import { Dropdown, Menu, Modal, Table, TableProps } from 'antd';
 import ButtonNoPadding from 'components/buttonNoPadding/ButtonNoPadding';
 import Pin from 'components/pin/Pin';
 import dayjs from 'dayjs';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useProjectModal } from 'utils';
-import { useEditProject } from 'utils/project';
-import { User } from '../searchPanel/SearchPanel';
-
-export interface Project {
-  id: number;
-  name: string;
-  personId: number;
-  organization: string;
-  pin: boolean;
-  created: number;
-}
+import { Project } from 'types/Project';
+import { User } from 'types/User';
+import { useProjectModal, useProjectsQueryKey } from 'utils';
+import { useDeleteProject, useEditProject } from 'utils/project';
 
 interface ListProps extends TableProps<Project> {
   users: User[];
@@ -25,11 +17,9 @@ interface ListProps extends TableProps<Project> {
 
 const List = ({ users, ...props }: ListProps) => {
   // console.log(users)
-  const { mutate } = useEditProject();
-  const { startEdit } = useProjectModal();
+  const { mutate } = useEditProject(useProjectsQueryKey());
 
   const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
-  const editProject = (id: number) => () => startEdit(id);
   return (
     <Table
       rowKey={'id'}
@@ -51,7 +41,7 @@ const List = ({ users, ...props }: ListProps) => {
           sorter: (a, b) => a.name.localeCompare(b.name),
           render(value, project) {
             return (
-              <Link to={`${String(project.id)}/dashboard`}>{project.name}</Link>
+              <Link to={`${String(project.id)}/kanban`}>{project.name}</Link>
             );
           },
         },
@@ -85,29 +75,47 @@ const List = ({ users, ...props }: ListProps) => {
         },
         {
           render(value, project) {
-            return (
-              <Dropdown
-                overlay={
-                  <Menu>
-                    <Menu.Item key={'edit'} onClick={editProject(project.id)}>
-                      Edit...
-                      {/* {props.projectButton} */}
-                    </Menu.Item>
-                    <Menu.Item key={'delete'}>
-                      Delete
-                      {/* {props.projectButton} */}
-                    </Menu.Item>
-                  </Menu>
-                }
-              >
-                <ButtonNoPadding type="link">...</ButtonNoPadding>
-              </Dropdown>
-            );
+            return <More project={project} />;
           },
         },
       ]}
       {...props}
     />
+  );
+};
+
+const More = ({ project }: { project: Project }) => {
+  const { startEdit } = useProjectModal();
+  const editProject = (id: number) => () => startEdit(id);
+  const { mutate: deleteProject } = useDeleteProject(useProjectsQueryKey());
+  const confirmDelete = (id: number) => {
+    Modal.confirm({
+      title: 'Are you sure you want to delete?',
+      content: 'Click "Yes" to delete this project.',
+      okText: 'Yes',
+      onOk() {
+        deleteProject(id);
+      },
+    });
+  };
+
+  return (
+    <Dropdown
+      overlay={
+        <Menu>
+          <Menu.Item key={'edit'} onClick={editProject(project.id)}>
+            Edit...
+            {/* {props.projectButton} */}
+          </Menu.Item>
+          <Menu.Item key={'delete'} onClick={() => confirmDelete(project.id)}>
+            Delete
+            {/* {props.projectButton} */}
+          </Menu.Item>
+        </Menu>
+      }
+    >
+      <ButtonNoPadding type="link">...</ButtonNoPadding>
+    </Dropdown>
   );
 };
 

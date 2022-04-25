@@ -1,4 +1,4 @@
-import { User } from 'components/searchPanel/SearchPanel';
+import { User } from "types/User";
 import { useEffect } from 'react';
 import { cleanObject } from 'utils';
 import { useHttp } from 'utils/http';
