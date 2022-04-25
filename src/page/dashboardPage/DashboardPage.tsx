@@ -3,6 +3,7 @@ import React from 'react';
 import { useDocumentTitle } from 'utils';
 import { useDashboard } from 'utils/dashboard';
 import DashboardColumn from './DashboardColumn';
+import SearchPanel from './SearchPanel';
 import { useDashboardsSearchParams, useProjectInUrl } from './util';
 
 const DashboardPage = () => {
@@ -13,6 +14,7 @@ const DashboardPage = () => {
   return (
     <div>
       <h1>{currentProject?.name} dashboard</h1>
+      <SearchPanel />
       <ColumnContainer>
         {dashboards?.map((kanban) => (
           <DashboardColumn kanban={kanban} key={kanban.id} />
