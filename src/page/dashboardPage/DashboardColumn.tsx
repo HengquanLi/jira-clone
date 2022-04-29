@@ -1,14 +1,20 @@
 import styled from '@emotion/styled';
-import { Card } from 'antd';
+import { Button, Card, Dropdown, Menu, Modal } from 'antd';
 import BugIcon from 'assets/bug';
 import TaskIcon from 'assets/taskIcon';
+import Marker from 'components/Mark/Marker';
 import Row from 'components/row/Row';
 import React from 'react';
 import { Kanban } from 'types/Kanban';
+import { useDeleteDashboard } from 'utils/dashboard';
 import { useTask } from 'utils/task';
 import { useTaskTypes } from 'utils/task-type';
 import { CreateTask } from './CreatTask';
-import { useTasksModal, useTasksSearchParams } from './util';
+import {
+  useDashboardsQueryKey,
+  useTasksModal,
+  useTasksSearchParams,
+} from './util';
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -22,11 +28,12 @@ const DashboardColumn = ({ dahsboard }: { dahsboard: Kanban }) => {
   const { data: allTasks } = useTask(useTasksSearchParams());
   // console.log(allTasks);
   const tasks = allTasks?.filter((task) => task.kanbanId === dahsboard.id);
+  const { name: keyword } = useTasksSearchParams();
   return (
     <Container>
       <Row between={true}>
         <h3>{dahsboard.name}</h3>
-        {/* <More kanban={kanban} key={kanban.id} /> */}
+        <More kanban={dahsboard} key={dahsboard.id} />
       </Row>
       <TasksContainer>
         {tasks?.map((task) => (
@@ -35,8 +42,10 @@ const DashboardColumn = ({ dahsboard }: { dahsboard: Kanban }) => {
             style={{ marginBottom: '0.5rem', cursor: 'pointer' }}
             key={task.id}
           >
-            <div>{task.name}</div>
-            {/* <BugIcon /> */}
+            {/* <div>{task.name}</div> */}
+            <p>
+              <Marker keyword={keyword} name={task.name} />
+            </p>
             <TaskTypeIcon id={task.typeId} />
           </Card>
         ))}
@@ -47,6 +56,34 @@ const DashboardColumn = ({ dahsboard }: { dahsboard: Kanban }) => {
 };
 
 export default DashboardColumn;
+
+const More = ({ kanban }: { kanban: Kanban }) => {
+  const { mutateAsync } = useDeleteDashboard(useDashboardsQueryKey());
+  const startDelete = () => {
+    Modal.confirm({
+      okText: 'Confirm',
+      cancelText: 'Cancel',
+      title:'Confirm to delete',
+      onOk() {
+        return mutateAsync({ id: kanban.id });
+      },
+    });
+  };
+  const overlay = (
+    <Menu>
+      <Menu.Item>
+        <Button type="link" onClick={startDelete}>
+          Delete
+        </Button>
+      </Menu.Item>
+    </Menu>
+  );
+  return (
+    <Dropdown overlay={overlay}>
+      <Button type="link">...</Button>
+    </Dropdown>
+  );
+};
 
 export const Container = styled.div`
   min-width: 27rem;

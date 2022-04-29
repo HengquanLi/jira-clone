@@ -5,7 +5,6 @@ import { ProjectListPage, ProjectPage } from 'page';
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { useProjectModal } from 'utils';
 
 const AuthenticatedApp = () => {
   // const [projectModalOpen, setProjectModalOpen] = useState(false);
@@ -36,7 +35,8 @@ const Container = styled.div`
 `;
 
 const Main = styled.main`
-  /* display:flex; */
+  display: flex;
+  overflow: hidden;
 `;
 
 export default AuthenticatedApp;
