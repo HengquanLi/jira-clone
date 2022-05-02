@@ -39,15 +39,15 @@ const DashboardColumn = React.forwardRef<HTMLDivElement, { dashboard: Kanban }>(
         </Row>
         <TasksContainer>
           <Drop
-            type="ROW"
-            direction="vertical"
-            droppableId={'task' + dashboard.id}
+            type={'ROW'}
+            direction={'vertical'}
+            droppableId={String(dashboard.id)}
           >
-            <DropChild>
-              {tasks?.map((task, index) => (
+            <DropChild style={{ minHeight: '1rem' }}>
+              {tasks?.map((task, taskIndex) => (
                 <Drag
                   key={task.id}
-                  index={index}
+                  index={taskIndex}
                   draggableId={'task' + task.id}
                 >
                   <div>

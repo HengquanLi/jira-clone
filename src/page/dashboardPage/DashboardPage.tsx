@@ -40,7 +40,11 @@ const DashboardPage = () => {
           <Spin size="large" />
         ) : (
           <ColumnContainer>
-            <Drop type="COLUMN" direction="horizontal" droppableId="dashboard">
+            <Drop
+              type={'COLUMN'}
+              direction={'horizontal'}
+              droppableId={'dashboard'}
+            >
               <DropChild style={{ display: 'flex' }}>
                 {dashboards?.map((dashboard, index) => (
                   <Drag
@@ -100,8 +104,8 @@ export const useDragEnd = () => {
           return;
         }
         reorderTask({
-          fromId: fromTask.id,
-          referenceId: toTask.id,
+          fromId: fromTask?.id,
+          referenceId: toTask?.id,
           fromDashboardId,
           toDashboardId,
           type:

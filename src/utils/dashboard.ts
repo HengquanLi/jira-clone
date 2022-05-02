@@ -43,6 +43,8 @@ export interface SortProps {
   referenceId: number;
   //before or after target item
   type: 'before' | 'after';
+  fromKanbanId?: number;
+  toKanbanId?: number;
 }
 
 export const useReorderDashboard = (queryKey: QueryKey) => {
