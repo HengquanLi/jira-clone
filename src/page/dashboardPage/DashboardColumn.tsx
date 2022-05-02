@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Button, Card, Dropdown, Menu, Modal } from 'antd';
 import BugIcon from 'assets/bug';
 import TaskIcon from 'assets/taskIcon';
+import { Drag, Drop, DropChild } from 'components/dragAndDrop/DragAndDrop';
 import Marker from 'components/Mark/Marker';
 import Row from 'components/row/Row';
 import React from 'react';
@@ -23,37 +24,55 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
   return name === 'task' ? <TaskIcon /> : <BugIcon />;
 };
 
-const DashboardColumn = ({ dahsboard }: { dahsboard: Kanban }) => {
-  const { startEdit } = useTasksModal();
-  const { data: allTasks } = useTask(useTasksSearchParams());
-  // console.log(allTasks);
-  const tasks = allTasks?.filter((task) => task.kanbanId === dahsboard.id);
-  const { name: keyword } = useTasksSearchParams();
-  return (
-    <Container>
-      <Row between={true}>
-        <h3>{dahsboard.name}</h3>
-        <More kanban={dahsboard} key={dahsboard.id} />
-      </Row>
-      <TasksContainer>
-        {tasks?.map((task) => (
-          <Card
-            onClick={() => startEdit(task.id)}
-            style={{ marginBottom: '0.5rem', cursor: 'pointer' }}
-            key={task.id}
+const DashboardColumn = React.forwardRef<HTMLDivElement, { dashboard: Kanban }>(
+  ({ dashboard, ...props }, ref) => {
+    const { startEdit } = useTasksModal();
+    const { data: allTasks } = useTask(useTasksSearchParams());
+    // console.log(allTasks);
+    const tasks = allTasks?.filter((task) => task.kanbanId === dashboard.id);
+    const { name: keyword } = useTasksSearchParams();
+    return (
+      <Container {...props} ref={ref}>
+        <Row between={true}>
+          <h3>{dashboard.name}</h3>
+          <More kanban={dashboard} key={dashboard.id} />
+        </Row>
+        <TasksContainer>
+          <Drop
+            type="ROW"
+            direction="vertical"
+            droppableId={'task' + dashboard.id}
           >
-            {/* <div>{task.name}</div> */}
-            <p>
-              <Marker keyword={keyword} name={task.name} />
-            </p>
-            <TaskTypeIcon id={task.typeId} />
-          </Card>
-        ))}
-        <CreateTask kanbanId={dahsboard.id} />
-      </TasksContainer>
-    </Container>
-  );
-};
+            <DropChild>
+              {tasks?.map((task, index) => (
+                <Drag
+                  key={task.id}
+                  index={index}
+                  draggableId={'task' + task.id}
+                >
+                  <div>
+                    <Card
+                      onClick={() => startEdit(task.id)}
+                      style={{ marginBottom: '0.5rem', cursor: 'pointer' }}
+                      key={task.id}
+                    >
+                      {/* <div>{task.name}</div> */}
+                      <p>
+                        <Marker keyword={keyword} name={task.name} />
+                      </p>
+                      <TaskTypeIcon id={task.typeId} />
+                    </Card>
+                  </div>
+                </Drag>
+              ))}
+            </DropChild>
+          </Drop>
+          <CreateTask kanbanId={dashboard.id} />
+        </TasksContainer>
+      </Container>
+    );
+  }
+);
 
 export default DashboardColumn;
 
@@ -63,7 +82,7 @@ const More = ({ kanban }: { kanban: Kanban }) => {
     Modal.confirm({
       okText: 'Confirm',
       cancelText: 'Cancel',
-      title:'Confirm to delete',
+      title: 'Confirm to delete',
       onOk() {
         return mutateAsync({ id: kanban.id });
       },
